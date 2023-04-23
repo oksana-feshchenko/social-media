@@ -18,19 +18,23 @@ class Migration(migrations.Migration):
             model_name="profile",
             name="person",
             field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
             ),
         ),
         migrations.AddField(
             model_name="post",
             name="tags",
-            field=models.ManyToManyField(related_name="posts", to="friendlyface.tag"),
+            field=models.ManyToManyField(
+                related_name="posts", to="friendlyface.tag"
+            ),
         ),
         migrations.AddField(
             model_name="post",
             name="user",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
             ),
         ),
     ]

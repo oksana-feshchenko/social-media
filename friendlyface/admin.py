@@ -1,11 +1,7 @@
 from django.contrib import admin
 
-from .models import (
-
-    Tag, Post, Profile)
+from .models import Tag, Post, Profile
 
 admin.site.register(Tag)
 admin.site.register(Post)
 admin.site.register(Profile)
-
-

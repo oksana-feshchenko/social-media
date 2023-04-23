@@ -57,7 +57,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "following",
-                    models.ManyToManyField(blank=True, to="friendlyface.profile"),
+                    models.ManyToManyField(
+                        blank=True, to="friendlyface.profile"
+                    ),
                 ),
             ],
         ),

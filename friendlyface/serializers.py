@@ -35,14 +35,14 @@ class TagDetailSerializer(TagSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'user', 'text', 'created_at', 'tags']
-        read_only_fields = ['id', 'created_at']
+        fields = ["id", "user", "text", "created_at", "tags"]
+        read_only_fields = ["id", "created_at"]
 
 
 class PostListSerializer(PostSerializer):
     user = serializers.CharField(
-            source="user.profile.username", read_only=True
-        )
+        source="user.profile.username", read_only=True
+    )
 
     class Meta:
         model = Post
@@ -56,13 +56,11 @@ class PostListSerializer(PostSerializer):
 
 class PostDetailSerializer(PostSerializer):
     tags = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='word'
+        many=True, read_only=True, slug_field="word"
     )
     user = serializers.CharField(
-            source="user.profile.username", read_only=True
-        )
+        source="user.profile.username", read_only=True
+    )
 
     class Meta:
         model = Post
@@ -76,8 +74,7 @@ class PostDetailSerializer(PostSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(
-        source="user.email", read_only=True)
+    email = serializers.CharField(source="user.email", read_only=True)
 
     class Meta:
         model = Profile
@@ -89,7 +86,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "city",
-
         )
 
 
@@ -109,8 +105,7 @@ class ProfileListSerializer(serializers.ModelSerializer):
 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(
-            source="user.email", read_only=True)
+    email = serializers.CharField(source="user.email", read_only=True)
     posts = serializers.SerializerMethodField()
     followers = ProfileSerializer(many=True)
 
@@ -125,7 +120,7 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
             "birth_date",
             "city",
             "posts",
-            "followers"
+            "followers",
         )
 
     def get_posts(self, obj):

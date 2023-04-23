@@ -34,7 +34,8 @@ class Migration(migrations.Migration):
             model_name="profile",
             name="photo",
             field=models.ImageField(
-                null=True, upload_to=friendlyface.models.profile_image_file_path
+                null=True,
+                upload_to=friendlyface.models.profile_image_file_path,
             ),
         ),
         migrations.AddField(

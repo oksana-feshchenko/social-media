@@ -16,7 +16,9 @@ class Post(models.Model):
     tags = models.ManyToManyField(to=Tag, related_name="posts", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="posts",
     )
 
     class Meta:
@@ -37,15 +39,22 @@ def profile_image_file_path(instance, filename):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
     username = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     city = models.CharField(max_length=50, blank=True)
-    photo = models.ImageField(null=True, upload_to=profile_image_file_path, blank=True)
-    following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name="followers")
+    photo = models.ImageField(
+        null=True, upload_to=profile_image_file_path, blank=True
+    )
+    following = models.ManyToManyField(
+        "self", symmetrical=False, blank=True, related_name="followers"
+    )
 
     def __str__(self):
         return self.username
-

@@ -11,8 +11,16 @@ from rest_framework.response import Response
 
 from friendlyface.models import Post, Profile, Tag
 from friendlyface.permissions import IsOwnerOrReadOnly
-from friendlyface.serializers import PostSerializer, ProfileSerializer, PostListSerializer, \
-    TagSerializer, ProfileListSerializer, ProfileDetailSerializer, ProfileImageSerializer, PostDetailSerializer
+from friendlyface.serializers import (
+    PostSerializer,
+    ProfileSerializer,
+    PostListSerializer,
+    TagSerializer,
+    ProfileListSerializer,
+    ProfileDetailSerializer,
+    ProfileImageSerializer,
+    PostDetailSerializer,
+)
 
 
 class TagViewSet(
@@ -35,7 +43,9 @@ class PostViewSet(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
-    queryset = Post.objects.prefetch_related("tags").select_related("user", "user__profile")
+    queryset = Post.objects.prefetch_related("tags").select_related(
+        "user", "user__profile"
+    )
     serializer_class = PostSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
 
@@ -45,10 +55,9 @@ class PostViewSet(
     def get_queryset(self):
         """Show only users posts or posts of people user following"""
         queryset = self.queryset
-        following = self.request.user.profile.following.values('user')
+        following = self.request.user.profile.following.values("user")
         queryset = queryset.filter(
-            Q(user=self.request.user) |
-            Q(user__in=following)
+            Q(user=self.request.user) | Q(user__in=following)
         )
         """Retrieve the posts with filters"""
         tag = self.request.query_params.get("tag")
@@ -70,7 +79,7 @@ class PostViewSet(
             return PostDetailSerializer
         return PostSerializer
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def my_posts(self, request):
         """Get all posts for the authenticated user"""
         posts = Post.objects.filter(user=request.user)
@@ -88,8 +97,8 @@ class PostViewSet(
                 "date",
                 type=OpenApiTypes.DATE,
                 description=(
-                        "Filter by datetime of posts creation "
-                        "(ex. ?date=2022-10-23)"
+                    "Filter by datetime of posts creation "
+                    "(ex. ?date=2022-10-23)"
                 ),
             ),
         ]
@@ -106,21 +115,25 @@ class ProfileViewSet(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
-    queryset = Profile.objects.prefetch_related("following").select_related("user")
+    queryset = Profile.objects.prefetch_related("following").select_related(
+        "user"
+    )
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
 
     def create(self, request, *args, **kwargs):
         """Raise error when user already has profile"""
         if request.user.profile:
-            raise serializers.ValidationError("You have already created a profile.")
+            raise serializers.ValidationError(
+                "You have already created a profile."
+            )
 
         return super().create(request, *args, **kwargs)
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return ProfileListSerializer
-        elif self.action == 'retrieve':
+        elif self.action == "retrieve":
             return ProfileDetailSerializer
         elif self.action == "upload_photo":
             return ProfileImageSerializer
@@ -131,16 +144,12 @@ class ProfileViewSet(
         queryset = self.queryset
         username = self.request.query_params.get("username")
         city = self.request.query_params.get("city")
-        if self.action == 'list':
+        if self.action == "list":
             queryset = queryset.annotate(followers_count=Count("followers"))
         if username:
-            queryset = queryset.filter(
-                username__icontains=username
-            )
+            queryset = queryset.filter(username__icontains=username)
         if city:
-            queryset = queryset.filter(
-                city__icontains=city
-            )
+            queryset = queryset.filter(city__icontains=city)
         return queryset
 
     @extend_schema(
@@ -153,23 +162,20 @@ class ProfileViewSet(
             OpenApiParameter(
                 "city",
                 type=OpenApiTypes.DATE,
-                description=(
-                        "Filter profiles by city"
-                        "(ex. ?city=Kyiv)"
-                ),
+                description="Filter profiles by city" "(ex. ?city=Kyiv)",
             ),
         ]
     )
-    def list(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):git st
         return super().list(request, *args, **kwargs)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def me(self, request):
         """User profile"""
         serializer = self.get_serializer(request.user.profile)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def following(self, request, pk=None):
         """Show profiles user follows"""
         profile = self.get_object()
@@ -180,7 +186,7 @@ class ProfileViewSet(
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def followers(self, request, pk=None):
         """Profiles of users who follows authenticated user"""
         profile = self.get_object()
@@ -189,9 +195,7 @@ class ProfileViewSet(
         return Response(serializer.data)
 
     @action(
-        detail=True,
-        methods=['post'],
-        permission_classes=[IsAuthenticated]
+        detail=True, methods=["post"], permission_classes=[IsAuthenticated]
     )
     def follow(self, request, pk=None):
         """Follow profile you watching at"""
@@ -201,9 +205,7 @@ class ProfileViewSet(
         return Response(status=status.HTTP_200_OK)
 
     @action(
-        detail=True,
-        methods=['delete'],
-        permission_classes=[IsAuthenticated]
+        detail=True, methods=["delete"], permission_classes=[IsAuthenticated]
     )
     def unfollow(self, request, pk=None):
         """Unfollow profile you watching at"""
@@ -227,4 +229,3 @@ class ProfileViewSet(
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

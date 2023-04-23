@@ -11,7 +11,6 @@ from django.utils.translation import gettext as _
 
 
 class UserManager(BaseUserManager):
-
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
@@ -40,7 +39,6 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-
 class User(AbstractUser):
     username = models.CharField(_("username"), max_length=100)
     email = models.EmailField(_("email address"), unique=True)
@@ -49,4 +47,3 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
-

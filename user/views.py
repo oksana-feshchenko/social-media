@@ -24,9 +24,11 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
 class LogoutView(APIView):
     def post(self, request):
         try:
-            refresh_token = request.data['refresh_token']
+            refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({'success': True})
+            return Response({"success": True})
         except:
-            return Response({'success': False, 'error': 'Invalid refresh token.'})
+            return Response(
+                {"success": False, "error": "Invalid refresh token."}
+            )
