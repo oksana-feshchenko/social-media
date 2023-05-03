@@ -1,28 +1,28 @@
 ## Social Media Platform RESTful API
-This Django project has a REST API that lets users create profiles and posts,
+This Django RESTful API lets users create profiles and posts,
 follow others, and filter posts and profiles. It uses Django REST Framework (DRF)
 and drf_spectacular for OpenAPI documentation.
 
 ### Tag
 The authenticated users are allowed CRUD operations on the Tag model.
-![tag.jpg](..%2Fphoto%2FNew%20folder%2Ftag.jpg)
+![tag](images_readme/tag.jpg)
 
 ### Post
 The authenticated users are allowed to see their own posts and posts of their followings.
 They could create and delete only their own posts.
-![posts.jpg](..%2Fphoto%2FNew%20folder%2Fposts.jpg)
+![posts](images_readme/posts.jpg)
 They could  filter posts with tags and date.
-![postfilter.jpg](..%2Fphoto%2FNew%20folder%2Fpostfilter.jpg)
+![postfilter](images_readme/postfilter.jpg)
 
 ### Profile
 Authenticated user could see list of others profile and 
 see detail page for all of them.
 They have ability to follow and unfollow other users.
 And they could create and delete their own profiles.
-![profile.jpg](..%2Fphoto%2FNew%20folder%2Fprofile.jpg)
+![profile](images_readme/profile.jpg)
 
 It has features to retrieve profiles with filters like username and city.
-![profile filter.jpg](..%2Fphoto%2FNew%20folder%2Fprofile%20filter.jpg)
+![profile_filter](images_readme/profile filter.jpg)
 
 
 ### Authentication
@@ -45,6 +45,9 @@ Install the required packages:
 ``` shell
  pip install -r requirements.txt
  ```
+
+Create .env file with variable from .env.sample
+
 Run migrations:
 ``` shell
 python manage.py migrate
